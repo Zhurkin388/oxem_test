@@ -1,45 +1,28 @@
 <?php
 
-require_once 'RegisterAnimals.php';
+namespace App;
+
 require_once 'functions/getNumEnding.php';
 
 /**
  * Класс, реализующий ферму, содержащую животных
  */
-
 class Farm
 {
     const WEEK = 7;
+    private $animals;
 
-    private int $cow;
-    private int $chicken;
-    private RegisterAnimals $animal;
-
-    public function __construct(int $cow, int $chicken)
+    public function __construct($animals)
     {
-        $this->cow = $cow;
-        $this->chicken = $chicken;
-
-        $this->animal = new RegisterAnimals();
+        $this->animals = $animals;
     }
 
-    public function getCountCow(): array
+    public function getCountAnimals($animal): array
     {
         $arr = [];
 
-        for ($i = 0; $i < $this->cow; $i++) {
-            $arr[] = $this->animal->getCow();
-        }
-
-        return $arr;
-    }
-
-    public function getCountChicken(): array
-    {
-        $arr = [];
-
-        for ($i = 0; $i < $this->chicken; $i++) {
-            $arr[] = $this->animal->getChicken();
+        for ($i = 0; $i < $animal->countAnimal; $i++) {
+            $arr[] = $animal;
         }
 
         return $arr;
@@ -69,17 +52,17 @@ class Farm
 
     public function init(): string
     {
-        $milk = $this->countDays($this->getCountCow());
-        $eggs = $this->countDays($this->getCountChicken());
+        $str = '';
 
-        return (
-            $this->cow . ' ' .
-            getNumEnding($this->cow, ['Корова', 'Коровы', 'Коров']) . ' дали ' .
-            $milk . ' ' .
-            getNumEnding($milk, ['литр', 'литра', 'литров']) . ' молока, ' .
-            $this->chicken . ' ' .
-            getNumEnding($this->chicken, ['курица', 'курицы', 'куриц']) . ' снесли ' .
-            $eggs . ' ' .
-            getNumEnding($eggs, ['яйцо', 'яйца', 'яиц']));
+        foreach ($this->animals as $animal) {
+            $product = $this->countDays($this->getCountAnimals($animal));
+
+            $str .= ' ' .
+                $animal->countAnimal . ' ' .
+                getNumEnding($animal->countAnimal, [$animal->getName . 'а', $animal->getName . 'ы', $animal->getName]) . ' ' .
+                $product . ' ' . $animal->getProductName;
+        }
+
+        return $str;
     }
 }

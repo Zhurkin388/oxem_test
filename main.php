@@ -1,10 +1,13 @@
 <?php
 
-require_once 'classes/Farm.php';
+require_once "vendor/autoload.php";
 
-const COW = 10;
-const CHICKEN = 20;
+use App\Chicken;
+use App\Cow;
+use App\Farm;
 
-$farm = new Farm(COW, CHICKEN);
+$animals = [new Cow(10), new Chicken(20)];
+
+$farm = new Farm($animals);
 
 echo $farm->init();
